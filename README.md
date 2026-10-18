@@ -96,6 +96,7 @@ erDiagram
 | Sesi dan Cookie | `AuthController`: `Auth::attempt`, `session()->regenerate()` saat login, `invalidate()` dan `regenerateToken()` saat logout; session state (`pencarian_terakhir`, `peminjam_terakhir`, `login_timestamp`); `Cookie::queue` (`del_last_user`, `del_peminjam_terakhir`) |
 | Proteksi rute | Semua rute mutasi (CRUD buku dan kategori, peminjaman, pengembalian) berada di grup middleware `auth` |
 | Seeder | `PustakawanUjiSeeder`, `BukuUjiSeeder` (stok 0 dan stok 1), `TransaksiSeeder` (sampel peminjaman) |
+| Tampilan | Pilihan tema warna (biru, merah, hijau, ungu) di sidebar, disimpan di `localStorage` browser; warna solid tanpa gradasi; font Bricolage Grotesque dan Figtree |
 
 ## Bukti pengujian
 
@@ -142,4 +143,8 @@ docs(readme): finalize README and fix screenshot filenames
 docs(readme): simplify test account and redraw ERD
 docs(readme): update clone URL to week6 repository
 docs(readme): clear ERD relation labels and add relation table
+style(ui): replace purple theme with teal palette
+docs(readme): update screenshots with new theme
+feat(ui): add user selectable color themes and stop prefilling login username
+docs(readme): update commit history and add theme feature
 ```
