@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $peran = Peran::DATA[$user->role];
 
         $g = [
-            'utama' => '#0F766E',
+            'utama' => 'var(--del)',
             'biru' => '#0369A1',
             'hijau' => '#4D7C0F',
             'oranye' => '#B45309',

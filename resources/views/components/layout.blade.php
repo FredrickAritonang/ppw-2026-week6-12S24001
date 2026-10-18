@@ -9,12 +9,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'SIPUS-Del' }} — Perpustakaan IT Del</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <script>try{var tm=localStorage.getItem('tema');if(['biru','merah','hijau','ungu'].indexOf(tm)>-1)document.documentElement.setAttribute('data-tema',tm)}catch(e){}</script>
     <script>try{if(window.innerWidth>=992&&localStorage.getItem('sidebarCollapsed')==='1')document.documentElement.classList.add('collapsed')}catch(e){}</script>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        :root { --del:#0F766E; --del-dark:#134E4A; --del-mid:#0D9488; --del-soft:#E3F2EF; --aksen:#F59E0B; --side:#0F1F1E; --sidew:268px; }
+        :root, html[data-tema="biru"] { --del:#1D4ED8; --del-dark:#1E3A8A; --del-mid:#2563EB; --del-soft:#E3EBFF; --side:#0F172A; --rgb:29,78,216; }
+        html[data-tema="merah"] { --del:#B91C1C; --del-dark:#7F1D1D; --del-mid:#DC2626; --del-soft:#FDE8E8; --side:#1F1011; --rgb:185,28,28; }
+        html[data-tema="hijau"] { --del:#15803D; --del-dark:#14532D; --del-mid:#16A34A; --del-soft:#E1F5E7; --side:#0E1D14; --rgb:21,128,61; }
+        html[data-tema="ungu"] { --del:#6D28D9; --del-dark:#4C1D95; --del-mid:#7C3AED; --del-soft:#EDE7FD; --side:#1A1033; --rgb:109,40,217; }
+        :root { --aksen:#F59E0B; --sidew:268px; }
         body { font-family:'Figtree',sans-serif; background:#F5F4EF; color:#1f2937; margin:0; }
         .page-title, .hero h2, .side-brand b, .stat-card .n, .panel-box h6, .cover-title, .notif-head { font-family:'Bricolage Grotesque',sans-serif; }
 
@@ -23,8 +28,12 @@
         .side-brand .pill { background:#fff; border-radius:.6rem; padding:.2rem .5rem; display:flex; }
         .side-brand img { height:36px; }
         .side-brand b { color:#fff; font-weight:800; line-height:1.1; display:block; }
-        .side-brand small { display:block; color:#B7E4DC; font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; }
+        .side-brand small { display:block; color:rgba(255,255,255,.75); font-size:.62rem; letter-spacing:.08em; text-transform:uppercase; }
         .brand-mini { display:none; color:#fff; font-size:1.7rem; }
+        .tema-picker { display:flex; gap:.7rem; justify-content:center; padding:.9rem 1rem; background:rgba(0,0,0,.28); }
+        .tema-dot { width:30px; height:30px; border:2px solid transparent; border-radius:.3rem; padding:0; cursor:pointer; transition:.15s; }
+        .tema-dot:hover { transform:translateY(-2px); }
+        .tema-dot.on { border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.3); }
         .side-role { display:flex; align-items:center; gap:.7rem; margin:.9rem 1rem .2rem; padding:.6rem .8rem; border-radius:.8rem; background:rgba(255,255,255,.07); color:#fff; font-size:.8rem; }
         .side-role i { font-size:1.2rem; color:#FBBF24; }
         .side-label { padding:1.1rem 1.2rem .4rem; font-size:.68rem; letter-spacing:.12em; color:#7E9893; text-transform:uppercase; white-space:nowrap; }
@@ -39,6 +48,7 @@
 
         @media (min-width:992px) {
             html.collapsed { --sidew:76px; }
+            html.collapsed .tema-picker { flex-direction:column; align-items:center; padding:.7rem 0; gap:.5rem; }
             html.collapsed .side-text, html.collapsed .brand-full, html.collapsed .side-role .txt { display:none; }
             html.collapsed .brand-mini { display:block; }
             html.collapsed .side-brand { justify-content:center; padding:1rem .5rem; }
@@ -72,20 +82,20 @@
         .notif-head { padding:.8rem 1rem; font-weight:700; color:var(--del); display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ECEAE1; }
         .notif-item { display:flex; gap:.8rem; padding:.8rem 1rem; text-decoration:none; color:#1f2937; border-bottom:1px solid #F1EFE8; transition:.15s; }
         .notif-item:hover { background:#F8F7F2; color:#1f2937; }
-        .notif-item.unread { background:#EEF7F5; }
+        .notif-item.unread { background:var(--del-soft); }
         .notif-item .ni { width:38px; height:38px; border-radius:50%; background:var(--del-soft); color:var(--del); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
         .notif-item .t { font-weight:600; font-size:.86rem; }
         .notif-item .m { font-size:.8rem; color:#64706E; }
         .notif-item small { color:#98A19F; font-size:.7rem; }
 
-        .panel-box { background:#fff; border-radius:1rem; box-shadow:0 4px 16px rgba(15,118,110,.09); padding:1.2rem; margin-bottom:1.2rem; }
+        .panel-box { background:#fff; border-radius:1rem; box-shadow:0 4px 16px rgba(var(--rgb),.09); padding:1.2rem; margin-bottom:1.2rem; }
         .panel-box h6 { color:var(--del); font-weight:700; border-bottom:2px solid var(--del-soft); padding-bottom:.6rem; margin-bottom:.9rem; }
         .info-row { display:flex; justify-content:space-between; gap:1rem; padding:.5rem 0; border-bottom:1px dashed #E4E2D9; font-size:.85rem; }
         .info-row:last-child { border-bottom:0; }
         .info-row span:first-child { color:#7C8785; flex-shrink:0; }
         .info-row span:last-child { font-weight:600; text-align:right; min-width:0; overflow-wrap:anywhere; }
 
-        .cover-box { position:relative; aspect-ratio:2/3; border-radius:.3rem .65rem .65rem .3rem; overflow:hidden; box-shadow:0 12px 26px rgba(16,33,31,.35), 0 2px 4px rgba(0,0,0,.2); container-type:inline-size; background:#0F766E; flex-shrink:0; }
+        .cover-box { position:relative; aspect-ratio:2/3; border-radius:.3rem .65rem .65rem .3rem; overflow:hidden; box-shadow:0 12px 26px rgba(16,33,31,.35), 0 2px 4px rgba(0,0,0,.2); container-type:inline-size; background:var(--del); flex-shrink:0; }
         .cover-box::before { content:''; position:absolute; inset:0 auto 0 0; width:6%; background:rgba(0,0,0,.22); z-index:3; }
         .cover-box img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#fff; z-index:2; }
         .cf { position:absolute; inset:0; padding:12cqw 9cqw 9cqw 14cqw; display:flex; flex-direction:column; color:#fff; }
@@ -96,16 +106,16 @@
         .cf-pub { margin-top:auto; font-size:4.8cqw; opacity:.8; }
         .cover-sm { width:72px; } .cover-md { width:112px; } .cover-lg { width:100%; } .cover-xl { width:100%; max-width:360px; margin:0 auto; }
 
-        .kat-card { background:#fff; border-radius:1.1rem; padding:1rem; height:100%; display:flex; flex-direction:column; gap:.8rem; box-shadow:0 4px 16px rgba(15,118,110,.08); transition:.25s; }
-        .kat-card:hover { transform:translateY(-5px); box-shadow:0 16px 32px rgba(15,118,110,.20); }
-        .kat-card .judul { font-weight:600; font-size:.95rem; line-height:1.3; color:#14302D; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .kat-card { background:#fff; border-radius:1.1rem; padding:1rem; height:100%; display:flex; flex-direction:column; gap:.8rem; box-shadow:0 4px 16px rgba(var(--rgb),.08); transition:.25s; }
+        .kat-card:hover { transform:translateY(-5px); box-shadow:0 16px 32px rgba(var(--rgb),.20); }
+        .kat-card .judul { font-weight:600; font-size:.95rem; line-height:1.3; color:#1F2937; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
         .kat-card .penulis { font-size:.8rem; color:#6B7775; }
         .tag { display:inline-block; background:var(--del-soft); color:var(--del); padding:.2rem .65rem; border-radius:50rem; font-size:.72rem; font-weight:500; margin:0 .25rem .25rem 0; }
         .tag-ebook { background:#DCFCE7; color:#166534; } .tag-low { background:#FEF3C7; color:#92400E; } .tag-out { background:#FEE2E2; color:#991B1B; } .tag-info { background:#E0F2FE; color:#0369A1; }
         .stat-card { border-radius:1rem; padding:1.2rem; color:#fff; display:flex; justify-content:space-between; align-items:center; box-shadow:0 8px 20px rgba(0,0,0,.14); transition:.2s; }
         .stat-card:hover { transform:translateY(-3px); }
         .stat-card .n { font-size:1.7rem; font-weight:800; line-height:1.1; } .stat-card i { font-size:2.4rem; opacity:.35; }
-        .reader-frame { width:100%; height:78vh; border:0; border-radius:.8rem; background:#fff; box-shadow:0 6px 22px rgba(15,118,110,.15); }
+        .reader-frame { width:100%; height:78vh; border:0; border-radius:.8rem; background:#fff; box-shadow:0 6px 22px rgba(var(--rgb),.15); }
 
         .loan-row { display:flex; gap:1rem; align-items:center; padding:1rem 0; border-bottom:1px solid #ECEAE1; flex-wrap:wrap; }
         .loan-row:last-child { border-bottom:0; }
@@ -116,18 +126,18 @@
         .badge-st { display:inline-block; padding:.28rem .75rem; border-radius:50rem; font-size:.74rem; font-weight:600; }
         .st-ok { background:#DCFCE7; color:#166534; } .st-warn { background:#FEF3C7; color:#92400E; } .st-bad { background:#FEE2E2; color:#991B1B; } .st-info { background:#E0F2FE; color:#0369A1; } .st-grey { background:#EEE; color:#555; }
 
-        .hero { position:relative; overflow:hidden; border-radius:1.5rem; padding:2.2rem 2.4rem; margin-bottom:2rem; color:#fff; background:var(--del); box-shadow:0 14px 34px rgba(15,118,110,.30); }
+        .hero { position:relative; overflow:hidden; border-radius:1.5rem; padding:2.2rem 2.4rem; margin-bottom:2rem; color:#fff; background:var(--del); box-shadow:0 14px 34px rgba(var(--rgb),.30); }
         .hero::before { content:''; position:absolute; width:320px; height:320px; border-radius:50%; background:rgba(255,255,255,.08); right:-70px; top:-120px; }
         .hero > * { position:relative; z-index:1; } .hero h2 { font-weight:800; margin:0; } .hero p { margin:.3rem 0 0; opacity:.85; }
         .hero-stat { display:inline-flex; align-items:center; gap:.5rem; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.25); padding:.35rem .9rem; border-radius:50rem; font-size:.85rem; margin-top:.9rem; }
         .btn-hero { background:#fff; color:var(--del); border:0; border-radius:.9rem; padding:.75rem 1.5rem; font-weight:700; box-shadow:0 8px 20px rgba(0,0,0,.2); }
-        .btn-hero:hover { background:#F0FDFA; color:var(--del-dark); }
-        .btn-del { background:var(--del); color:#fff; border:0; border-radius:.7rem; padding:.55rem 1.2rem; font-weight:500; box-shadow:0 4px 12px rgba(15,118,110,.3); }
+        .btn-hero:hover { background:var(--del-soft); color:var(--del-dark); }
+        .btn-del { background:var(--del); color:#fff; border:0; border-radius:.7rem; padding:.55rem 1.2rem; font-weight:500; box-shadow:0 4px 12px rgba(var(--rgb),.3); }
         .btn-del:hover { color:#fff; background:var(--del-dark); transform:translateY(-1px); }
         .btn-del:disabled, .btn-del.disabled { opacity:.5; }
         .text-del { color:var(--del); }
-        .book-card { background:#fff; border-radius:1.2rem; overflow:hidden; box-shadow:0 4px 16px rgba(15,118,110,.10); transition:.25s; display:flex; flex-direction:column; }
-        .book-card:hover { transform:translateY(-6px); box-shadow:0 18px 36px rgba(15,118,110,.22); }
+        .book-card { background:#fff; border-radius:1.2rem; overflow:hidden; box-shadow:0 4px 16px rgba(var(--rgb),.10); transition:.25s; display:flex; flex-direction:column; }
+        .book-card:hover { transform:translateY(-6px); box-shadow:0 18px 36px rgba(var(--rgb),.22); }
         .cover { position:relative; padding:1.1rem 1.2rem 1.3rem; min-height:190px; color:#fff; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
         .cover::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,.18); }
         .cover > * { position:relative; z-index:1; }
@@ -141,18 +151,18 @@
         .book-body { padding:1rem 1.2rem 1.2rem; display:flex; flex-direction:column; gap:.9rem; flex:1; }
         .meta { display:grid; grid-template-columns:1fr 1fr; gap:.6rem .8rem; font-size:.8rem; }
         .meta .label { color:#98A19F; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; display:block; }
-        .meta .val { font-weight:600; color:#14302D; word-break:break-word; } .meta .full { grid-column:1/-1; }
+        .meta .val { font-weight:600; color:#1F2937; word-break:break-word; } .meta .full { grid-column:1/-1; }
         .actions { display:flex; gap:.5rem; margin-top:auto; align-items:stretch; }
         .actions form { display:flex; }
         .btn-detail { flex:1; background:var(--del-soft); color:var(--del); border:0; border-radius:.7rem; padding:.55rem; font-weight:600; font-size:.85rem; text-decoration:none; text-align:center; }
         .btn-detail:hover { background:var(--del); color:#fff; }
         .btn-icon { width:40px; height:40px; padding:0; display:inline-flex; align-items:center; justify-content:center; border-radius:.7rem; border:0; text-decoration:none; }
         .btn-edit { background:#FEF3C7; color:#B45309; } .btn-remove { background:#FEE2E2; color:#B91C1C; }
-        .empty-state { background:#fff; border-radius:1.2rem; padding:4rem 1rem; text-align:center; color:#7C8785; box-shadow:0 4px 16px rgba(15,118,110,.08); }
-        .page-header { background:#fff; border-radius:1rem; padding:1.2rem 1.5rem; box-shadow:0 4px 18px rgba(15,118,110,.08); }
-        .card-del { border:0; border-radius:1.2rem; box-shadow:0 6px 22px rgba(15,118,110,.12); background:#fff; }
+        .empty-state { background:#fff; border-radius:1.2rem; padding:4rem 1rem; text-align:center; color:#7C8785; box-shadow:0 4px 16px rgba(var(--rgb),.08); }
+        .page-header { background:#fff; border-radius:1rem; padding:1.2rem 1.5rem; box-shadow:0 4px 18px rgba(var(--rgb),.08); }
+        .card-del { border:0; border-radius:1.2rem; box-shadow:0 6px 22px rgba(var(--rgb),.12); background:#fff; }
         .form-control,.form-select { border-radius:.7rem; padding:.65rem .95rem; }
-        .form-control:focus,.form-select:focus { border-color:var(--del); box-shadow:0 0 0 .2rem rgba(15,118,110,.15); }
+        .form-control:focus,.form-select:focus { border-color:var(--del); box-shadow:0 0 0 .2rem rgba(var(--rgb),.15); }
         .alert { border:0; border-radius:.9rem; box-shadow:0 4px 14px rgba(0,0,0,.07); }
         .pagination .page-link { color:var(--del); border:0; border-radius:.6rem; margin:0 2px; }
         .pagination .active .page-link { background:var(--del); color:#fff; }
@@ -170,6 +180,13 @@
             <span class="pill brand-full"><img src="{{ asset('images/logo.png') }}" alt="Logo IT Del Library"></span>
             <div class="brand-full"><b>SIPUS-Del</b><small>Perpustakaan IT Del</small></div>
             <i class="bi bi-book-half brand-mini"></i>
+        </div>
+
+        <div class="tema-picker">
+            <button type="button" class="tema-dot" data-tema="biru" style="background:#1D4ED8" title="Tema biru" aria-label="Tema biru"></button>
+            <button type="button" class="tema-dot" data-tema="merah" style="background:#B91C1C" title="Tema merah" aria-label="Tema merah"></button>
+            <button type="button" class="tema-dot" data-tema="hijau" style="background:#15803D" title="Tema hijau" aria-label="Tema hijau"></button>
+            <button type="button" class="tema-dot" data-tema="ungu" style="background:#6D28D9" title="Tema ungu" aria-label="Tema ungu"></button>
         </div>
 
         <div class="side-role" title="{{ $dataPeran['label'] }}">
@@ -309,6 +326,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        var daftarTema = document.querySelectorAll('.tema-dot');
+        function tandaiTema(nama) {
+            daftarTema.forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-tema') === nama); });
+        }
+        daftarTema.forEach(function (b) {
+            b.addEventListener('click', function () {
+                var nama = b.getAttribute('data-tema');
+                document.documentElement.setAttribute('data-tema', nama);
+                try { localStorage.setItem('tema', nama); } catch (e) {}
+                tandaiTema(nama);
+            });
+        });
+        tandaiTema(document.documentElement.getAttribute('data-tema') || 'biru');
+
         document.getElementById('btnToggle').addEventListener('click', function () {
             if (window.innerWidth < 992) {
                 document.getElementById('sidebar').classList.toggle('open');

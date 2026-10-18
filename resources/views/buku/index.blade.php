@@ -1,5 +1,5 @@
 @php
-    $cover = ['#0F766E', '#0369A1', '#4D7C0F', '#B45309', '#BE185D', '#B91C1C'];
+    $cover = ['var(--del)', '#0369A1', '#4D7C0F', '#B45309', '#BE185D', '#B91C1C'];
 @endphp
 
 <x-layout title="Daftar Buku">
